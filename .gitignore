@@ -5,9 +5,20 @@ node_modules/
 android/
 
 # Chaves e arquivos de assinatura (NUNCA versionar)
+# O keystore de producao fica FORA do repositorio (guarde em local seguro).
+# No CI ele chega apenas via Secret, em base64, e nunca e gravado aqui.
 *.jks
 *.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+*.b64
 keystore.properties
+*keystore.properties
+upload-keystore*
+*-keystore.*
+signing/
 
 # Logs e arquivos do sistema
 *.log

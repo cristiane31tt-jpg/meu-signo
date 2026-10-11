@@ -1,0 +1,130 @@
+# =====================================================================
+# Meu Signo - AAB de PRODUCAO (release) assinado na nuvem do GitHub Actions
+# ---------------------------------------------------------------------
+# Roda SOMENTE quando voce clica em "Run workflow" (workflow_dispatch).
+# NAO roda automaticamente em push, para nao gerar builds de producao sem
+# querer.
+#
+# Assinatura: usa a chave de UPLOAD guardada nos Secrets do repositorio.
+#   - O keystore NUNCA fica no repositorio (esta no secret, em base64).
+#   - O keystore e descriptografado apenas em memoria/arquivo temporario do
+#     runner e removido ao fim.
+#   - Nenhuma senha e impressa nos logs (o GitHub ainda mascara os secrets).
+#
+# Secrets necessarios (cadastrar manualmente em Settings > Secrets > Actions):
+#   UPLOAD_KEYSTORE_BASE64   -> keystore (.p12) convertido em base64
+#   UPLOAD_KEYSTORE_PASSWORD -> senha do keystore
+#   UPLOAD_KEY_ALIAS         -> alias da chave (ex.: upload)
+#   UPLOAD_KEY_PASSWORD      -> senha da chave
+#
+# Gera o artefato "meu-signo-aab-release" (o AAB assinado para a Google Play).
+# A pasta docs/ NAO e alterada.
+# =====================================================================
+
+name: Build Android AAB release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    name: Gerar AAB de producao (assinado com a chave de upload)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalar Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar o Android SDK (command-line tools)
+        uses: android-actions/setup-android@v4
+
+      - name: Aceitar licencas e instalar componentes do Android SDK
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Conferir se os secrets de assinatura existem
+        env:
+          KS_B64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+        run: |
+          missing=0
+          if [ -z "$KS_B64" ];   then echo "::error::Falta o secret UPLOAD_KEYSTORE_BASE64";   missing=1; fi
+          if [ -z "$KS_PASS" ];  then echo "::error::Falta o secret UPLOAD_KEYSTORE_PASSWORD"; missing=1; fi
+          if [ -z "$KEY_ALIAS" ]; then echo "::error::Falta o secret UPLOAD_KEY_ALIAS";         missing=1; fi
+          if [ -z "$KEY_PASS" ]; then echo "::error::Falta o secret UPLOAD_KEY_PASSWORD";       missing=1; fi
+          if [ "$missing" -ne 0 ]; then exit 1; fi
+          echo "Secrets de assinatura encontrados."
+
+      - name: Instalar dependencias do projeto
+        run: npm install
+
+      - name: Criar o projeto Android do zero e sincronizar
+        run: |
+          rm -rf android
+          npx cap add android
+          npx cap sync android
+
+      - name: Compilar o AAB de release (sem assinatura do Gradle)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleRelease --no-daemon --stacktrace
+
+      - name: Assinar o AAB com a chave de upload
+        env:
+          KS_B64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KS_FILE="$RUNNER_TEMP/upload-keystore.p12"
+          printf '%s' "$KS_B64" | base64 -d > "$KS_FILE"
+          AAB="$(find android/app/build/outputs/bundle -name '*.aab' | head -1)"
+          if [ -z "$AAB" ]; then echo "::error::Nenhum AAB encontrado para assinar."; exit 1; fi
+          echo "Assinando: $AAB"
+          jarsigner \
+            -keystore "$KS_FILE" -storetype PKCS12 \
+            -storepass "$KS_PASS" -keypass "$KEY_PASS" \
+            -sigalg SHA256withRSA -digestalg SHA-256 \
+            "$AAB" "$KEY_ALIAS"
+          rm -f "$KS_FILE"
+          echo "Assinatura aplicada com sucesso."
+
+      - name: Verificar a assinatura do AAB
+        run: |
+          AAB="$(find android/app/build/outputs/bundle -name '*.aab' | head -1)"
+          jarsigner -verify -certs "$AAB" | tail -15
+
+      - name: Publicar o AAB de producao como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: meu-signo-aab-release
+          path: android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Limpar o keystore temporario
+        if: always()
+        run: rm -f "$RUNNER_TEMP/upload-keystore.p12" || true
