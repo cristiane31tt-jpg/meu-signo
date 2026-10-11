@@ -75,19 +75,29 @@ jobs:
           npx cap add android
           npx cap sync android
 
-      - name: Compilar o AAB de validacao (debug)
+      - name: Compilar o AAB e o APK de validacao (debug)
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew bundleDebug --no-daemon --stacktrace
+          ./gradlew bundleDebug assembleDebug --no-daemon --stacktrace
 
-      - name: Mostrar o AAB gerado
-        run: find android/app/build/outputs/bundle -name "*.aab"
+      - name: Mostrar o AAB e o APK gerados
+        run: |
+          find android/app/build/outputs/bundle -name "*.aab"
+          find android/app/build/outputs/apk -name "*.apk"
 
       - name: Publicar o AAB como artefato para download
         uses: actions/upload-artifact@v4
         with:
           name: meu-signo-aab
           path: android/app/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publicar o APK como artefato para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: meu-signo-apk
+          path: android/app/build/outputs/apk/**/*.apk
           if-no-files-found: error
           retention-days: 30
