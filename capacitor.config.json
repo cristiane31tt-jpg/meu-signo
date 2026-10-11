@@ -1,0 +1,11 @@
+{
+  "appId": "com.meusigno.app",
+  "appName": "Meu Signo",
+  "webDir": "docs",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

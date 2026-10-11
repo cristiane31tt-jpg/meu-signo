@@ -1,0 +1,93 @@
+# =====================================================================
+# Meu Signo - Build do Android (.aab) na nuvem do GitHub Actions
+# ---------------------------------------------------------------------
+# Este fluxo NAO depende de nada instalado no seu computador.
+#
+# O app usa como conteudo web a propria pasta docs/ (o site ja publicado),
+# definida em capacitor.config.json (webDir: "docs"). A pasta docs/ NAO e
+# alterada por este workflow.
+#
+# O que ele faz a cada execucao:
+#   1. Baixa o codigo do repositorio.
+#   2. Instala Node.js 22, Java 21 e o Android SDK.
+#   3. Instala as dependencias do projeto (npm install).
+#   4. Cria o projeto Android DO ZERO (npx cap add android) e sincroniza.
+#   5. Compila um .aab.
+#   6. Publica o .aab como artefato para download.
+#
+# ETAPA ATUAL: compilacao de VALIDACAO, SEM assinatura de producao.
+#   -> Usa bundleDebug: gera "app-debug.aab" (assinado com a chave de
+#      depuracao automatica do Android). Valida a compilacao, mas NAO e
+#      enviado para a Google Play.
+# =====================================================================
+
+name: Build Android AAB
+
+on:
+  # Permite rodar manualmente pelo botao "Run workflow".
+  workflow_dispatch:
+  # Tambem roda automaticamente a cada envio para a branch principal.
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-aab-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Gerar AAB (validacao, sem assinatura de producao)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalar Java 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar o Android SDK (command-line tools)
+        uses: android-actions/setup-android@v3
+
+      - name: Aceitar licencas e instalar componentes do Android SDK
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Instalar dependencias do projeto
+        run: npm install
+
+      - name: Criar o projeto Android do zero e sincronizar
+        run: |
+          rm -rf android
+          npx cap add android
+          npx cap sync android
+
+      - name: Compilar o AAB de validacao (debug)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleDebug --no-daemon --stacktrace
+
+      - name: Mostrar o AAB gerado
+        run: find android/app/build/outputs/bundle -name "*.aab"
+
+      - name: Publicar o AAB como artefato para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: meu-signo-aab
+          path: android/app/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+          retention-days: 30

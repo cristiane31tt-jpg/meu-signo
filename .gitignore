@@ -1,0 +1,15 @@
+# Dependencias instaladas (nao versionar)
+node_modules/
+
+# Projeto Android gerado pelo Capacitor (recriado do zero no build da nuvem)
+android/
+
+# Chaves e arquivos de assinatura (NUNCA versionar)
+*.jks
+*.keystore
+keystore.properties
+
+# Logs e arquivos do sistema
+*.log
+.DS_Store
+Thumbs.db
