@@ -117,13 +117,19 @@ jobs:
           AAB="$(find android/app/build/outputs/bundle -name '*.aab' | head -1)"
           jarsigner -verify -certs "$AAB" | tail -15
 
-      - name: Publicar o AAB de producao como artefato
-        uses: actions/upload-artifact@v4
-        with:
-          name: meu-signo-aab-release
-          path: android/app/build/outputs/bundle/release/*.aab
-          if-no-files-found: error
-          retention-days: 14
+      - name: Registrar o resultado da validacao (sem expor o AAB)
+        run: |
+          AAB="$(find android/app/build/outputs/bundle -name '*.aab' | head -1)"
+          HASH="$(sha256sum "$AAB" | awk '{print $1}')"
+          echo "SHA-256 do AAB de release: $HASH"
+          {
+            echo "### AAB de release assinado (somente validacao)"
+            echo ""
+            echo "- Arquivo: $(basename "$AAB")"
+            echo "- SHA-256 do AAB: \`$HASH\`"
+            echo "- Assinatura: chave de upload (jarsigner / JAR signing)"
+            echo "- O AAB NAO foi publicado como artefato (repositorio publico)."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Limpar o keystore temporario
         if: always()
