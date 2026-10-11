@@ -1,0 +1,22 @@
+{
+  "name": "Meu Signo",
+  "short_name": "Meu Signo",
+  "description": "Descubra seu signo, conheca os 12 signos do zodiaco e veja a compatibilidade entre eles.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./index.html#/",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07070d",
+  "theme_color": "#07070d",
+  "categories": ["lifestyle", "entertainment"],
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

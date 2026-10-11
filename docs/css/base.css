@@ -1,0 +1,536 @@
+/* =====================================================================
+   MEU SIGNO - base
+   Reset, variaveis de design, tipografia, layout e animacoes.
+   Mobile first: o layout base e pensado para celular e ganha ajustes
+   em telas maiores nos breakpoints do final do arquivo.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Reset enxuto
+   --------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+/* ---------------------------------------------------------------------
+   2. Variaveis de design (tokens)
+   Troque aqui para mudar a identidade visual do app inteiro.
+   --------------------------------------------------------------------- */
+:root {
+  /* Cores base */
+  --bg: #07070d;
+  --bg-soft: #0d0e1a;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Texto */
+  --text: #f4f5fa;
+  --text-dim: #a9aec7;
+  --text-mute: #767c99;
+
+  /* Marca */
+  --brand: #8b7cff;
+  --brand-soft: rgba(139, 124, 255, 0.16);
+  --gold: #d9b877;
+
+  /* Estado */
+  --danger: #ff7a8a;
+  --ok: #3ddc97;
+
+  /* Cor do signo em exibicao (trocada por JS) */
+  --sign: var(--brand);
+
+  /* Tipografia: apenas fontes do sistema, zero requisicoes externas */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+  /* Espacamento */
+  --gap-xs: 6px;
+  --gap-sm: 10px;
+  --gap: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 34px;
+
+  /* Formas */
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --fast: 160ms;
+  --normal: 280ms;
+
+  /* Layout */
+  --page-max: 760px;
+  --tabbar-h: 66px;
+  --header-h: 58px;
+}
+
+/* ---------------------------------------------------------------------
+   3. Base
+   --------------------------------------------------------------------- */
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Brilho de fundo, bem discreto, para dar profundidade sem poluir. */
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 45% at 15% -5%, rgba(139, 124, 255, 0.22), transparent 70%),
+    radial-gradient(55% 40% at 100% 0%, rgba(217, 184, 119, 0.14), transparent 65%),
+    radial-gradient(85% 60% at 50% 110%, rgba(92, 201, 245, 0.10), transparent 70%),
+    linear-gradient(180deg, var(--bg-soft), var(--bg) 60%);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 7vw, 2.6rem);
+}
+
+h2 {
+  font-size: clamp(1.3rem, 4.6vw, 1.6rem);
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+p {
+  color: var(--text-dim);
+}
+
+a {
+  color: var(--brand);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------
+   4. Estrutura da pagina
+   --------------------------------------------------------------------- */
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding-inline: 12px;
+  background: rgba(7, 7, 13, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-bar__inner {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.app-bar__title {
+  font-size: 1.02rem;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-bar__mark {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.app-bar__dot {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(140deg, var(--brand), #5b4bd6);
+  box-shadow: 0 4px 14px rgba(139, 124, 255, 0.35);
+}
+
+.app-bar__dot svg {
+  width: 16px;
+  height: 16px;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.back-btn:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.back-btn[hidden] {
+  display: none;
+}
+
+.app-main {
+  padding-block: var(--gap-lg) calc(var(--tabbar-h) + var(--gap-xl));
+  min-height: calc(100vh - var(--header-h) - var(--tabbar-h));
+}
+
+/* ---------------------------------------------------------------------
+   5. Barra de abas (3 itens, alvos grandes)
+   --------------------------------------------------------------------- */
+.tab-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: flex;
+  background: rgba(7, 7, 13, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+}
+
+.tab-bar__inner {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: var(--tabbar-h);
+  padding: 8px 4px;
+  font-size: 0.72rem;
+  font-weight: 560;
+  letter-spacing: 0.01em;
+  color: var(--text-mute);
+  text-decoration: none;
+  transition: color var(--fast) var(--ease);
+}
+
+.tab svg {
+  width: 21px;
+  height: 21px;
+}
+
+.tab.is-active {
+  color: var(--brand);
+}
+
+.tab.is-active .tab__icon {
+  filter: drop-shadow(0 3px 10px rgba(139, 124, 255, 0.45));
+}
+
+/* ---------------------------------------------------------------------
+   6. Painel "Sobre este app"
+
+   Fica recolhido no fim da tela: a informacao continua acessivel,
+   mas nao compete com o conteudo principal.
+   --------------------------------------------------------------------- */
+.app-note {
+  margin-top: var(--gap-xl);
+  border-top: 1px solid var(--border);
+  padding-top: var(--gap-sm);
+}
+
+.app-note__summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 var(--gap-sm);
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--radius-sm);
+  transition: color var(--fast) var(--ease);
+}
+
+.app-note__summary::-webkit-details-marker {
+  display: none;
+}
+
+.app-note__summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform var(--fast) var(--ease);
+}
+
+.app-note[open] .app-note__summary::after {
+  transform: rotate(-135deg) translateY(-1px);
+}
+
+.app-note__summary:hover,
+.app-note__summary:focus-visible {
+  color: var(--text-dim);
+}
+
+.app-note__body {
+  padding: 0 var(--gap-sm) var(--gap-sm);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--text-mute);
+  text-align: center;
+}
+
+.app-note__body strong {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.app-note__meta {
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+/* Link para a politica de privacidade dentro do painel "Sobre". */
+.app-note__links {
+  margin-top: 10px;
+}
+
+.app-note__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--sign);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity var(--fast) var(--ease);
+}
+
+.app-note__link:hover,
+.app-note__link:focus-visible {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------
+   7. Animacoes
+   --------------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.screen-enter {
+  animation: rise var(--normal) var(--ease) both;
+}
+
+/* Cada item da lista entra com um pequeno atraso. */
+.stagger > * {
+  animation: rise var(--normal) var(--ease) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 45ms; }
+.stagger > *:nth-child(3) { animation-delay: 90ms; }
+.stagger > *:nth-child(4) { animation-delay: 135ms; }
+.stagger > *:nth-child(5) { animation-delay: 180ms; }
+.stagger > *:nth-child(6) { animation-delay: 225ms; }
+.stagger > *:nth-child(7) { animation-delay: 270ms; }
+.stagger > *:nth-child(8) { animation-delay: 315ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   8. Utilitarios
+   --------------------------------------------------------------------- */
+.stack > * + * {
+  margin-top: var(--gap);
+}
+
+.stack-sm > * + * {
+  margin-top: var(--gap-sm);
+}
+
+.stack-lg > * + * {
+  margin-top: var(--gap-lg);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.muted {
+  color: var(--text-mute);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------
+   9. Breakpoints
+   --------------------------------------------------------------------- */
+
+/* Tablet / desktop */
+@media (min-width: 700px) {
+  :root {
+    --tabbar-h: 72px;
+  }
+
+  body {
+    font-size: 17px;
+  }
+
+  .page {
+    padding-inline: 28px;
+  }
+
+  .app-main {
+    padding-block: var(--gap-xl) calc(var(--tabbar-h) + var(--gap-xl));
+  }
+
+  .app-note__body {
+    text-align: left;
+  }
+}
+
+/* Desktop largo: a barra de abas vira lateral apenas se houver
+   espaco; por enquanto mantemos embaixo para simplicidade. */
+@media (min-width: 1024px) {
+  .page {
+    padding-inline: 0;
+  }
+}
+
+/* Telas muito estreitas (iPhone SE e similares) */
+@media (max-width: 360px) {
+  :root {
+    --gap: 14px;
+  }
+
+  .page {
+    padding-inline: 16px;
+  }
+}

@@ -1,0 +1,459 @@
+/* =====================================================================
+   MEU SIGNO - screens
+   Estilos especificos de cada tela.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Cabecalho de secao
+   --------------------------------------------------------------------- */
+.section-head {
+  margin-bottom: var(--gap);
+}
+
+.section-head__title {
+  font-size: 1.34rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.section-head__sub {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: var(--text-mute);
+}
+
+.section {
+  margin-top: var(--gap-lg);
+}
+
+.section__title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: var(--gap-sm);
+  font-size: 0.78rem;
+  font-weight: 640;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.section__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ---------------------------------------------------------------------
+   1. Tela inicial
+   --------------------------------------------------------------------- */
+.hero {
+  padding: var(--gap-lg) 0 var(--gap);
+  text-align: center;
+}
+
+.hero__mark {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto var(--gap);
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  color: #fff;
+  background: linear-gradient(140deg, var(--brand), #5b4bd6);
+  box-shadow: 0 18px 44px -18px rgba(139, 124, 255, 0.9);
+}
+
+.hero__mark svg {
+  width: 42px;
+  height: 42px;
+}
+
+.hero__title {
+  margin-bottom: 10px;
+  background: linear-gradient(180deg, #ffffff, #b9bde0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__phrase {
+  max-width: 26ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--text-dim);
+  text-wrap: balance;
+  font-style: italic;
+}
+
+.hero__card {
+  margin-top: var(--gap-lg);
+  padding: var(--gap-lg) var(--gap);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.hero__card-head {
+  margin-bottom: var(--gap);
+}
+
+.hero__card-title {
+  font-size: 1.06rem;
+  font-weight: 620;
+}
+
+.hero__card-sub {
+  margin-top: 5px;
+  font-size: 0.86rem;
+  color: var(--text-mute);
+}
+
+.home__footer-links {
+  margin-top: var(--gap);
+}
+
+/* ---------------------------------------------------------------------
+   2. Tela do resultado
+   --------------------------------------------------------------------- */
+.result__hero {
+  position: relative;
+  overflow: hidden;
+  padding: var(--gap-xl) var(--gap-lg);
+  text-align: center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--sign) 26%, transparent), transparent 72%),
+    var(--surface);
+  border: 1px solid color-mix(in srgb, var(--sign) 26%, transparent);
+  border-radius: var(--radius-lg);
+}
+
+.result__halo {
+  position: absolute;
+  top: -70px;
+  left: 50%;
+  width: 240px;
+  height: 240px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sign) 30%, transparent), transparent 68%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.result__glyph {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto var(--gap);
+  display: grid;
+  place-items: center;
+  color: var(--sign);
+  background: color-mix(in srgb, var(--sign) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sign) 34%, transparent);
+  border-radius: 28px;
+  animation: rise var(--normal) var(--ease) both;
+}
+
+.result__glyph svg {
+  width: 50px;
+  height: 50px;
+}
+
+.result__name {
+  position: relative;
+  font-size: clamp(2rem, 8vw, 2.7rem);
+  color: var(--text);
+}
+
+.result__tagline {
+  position: relative;
+  margin-top: 8px;
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+.result__period {
+  position: relative;
+  margin-top: 14px;
+  display: inline-flex;
+  padding: 7px 14px;
+  font-size: 0.84rem;
+  font-weight: 560;
+  color: var(--sign);
+  background: color-mix(in srgb, var(--sign) 11%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sign) 30%, transparent);
+  border-radius: var(--radius-pill);
+}
+
+.result__facts {
+  margin-top: var(--gap);
+  justify-content: center;
+}
+
+/* Frase do signo: o texto que muda a cada visita. */
+.result__phrase {
+  position: relative;
+  max-width: 30ch;
+  margin: var(--gap) auto 0;
+  padding: var(--gap) var(--gap);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--text-dim);
+  text-align: center;
+  text-wrap: balance;
+  background: color-mix(in srgb, var(--sign) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sign) 20%, transparent);
+  border-radius: var(--radius-lg);
+}
+
+.result__phrase::before {
+  content: '\201C';
+  display: block;
+  font-size: 1.6rem;
+  line-height: 0.6;
+  font-style: normal;
+  color: var(--sign);
+  opacity: 0.65;
+}
+
+.result__actions {
+  margin-top: var(--gap);
+}
+
+/* ---------------------------------------------------------------------
+   3. Os 12 signos
+   --------------------------------------------------------------------- */
+.all-signs__legend {
+  margin-bottom: var(--gap);
+}
+
+/* ---------------------------------------------------------------------
+   4. Detalhe do signo
+   --------------------------------------------------------------------- */
+.detail__hero {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding: var(--gap-lg);
+  background:
+    radial-gradient(110% 100% at 0% 0%, color-mix(in srgb, var(--sign) 22%, transparent), transparent 70%),
+    var(--surface);
+  border: 1px solid color-mix(in srgb, var(--sign) 24%, transparent);
+  border-radius: var(--radius-lg);
+}
+
+.detail__glyph {
+  flex: 0 0 auto;
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  color: var(--sign);
+  background: color-mix(in srgb, var(--sign) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sign) 32%, transparent);
+  border-radius: 22px;
+}
+
+.detail__glyph svg {
+  width: 38px;
+  height: 38px;
+}
+
+.detail__text {
+  min-width: 0;
+}
+
+.detail__name {
+  font-size: clamp(1.6rem, 6.4vw, 2rem);
+}
+
+.detail__period {
+  margin-top: 5px;
+  font-size: 0.86rem;
+  color: var(--text-mute);
+}
+
+.detail__facts {
+  margin-top: var(--gap);
+}
+
+/* Frase do signo na pagina individual: mesma logica da tela de
+   resultado, adapting para o bloco de texto ao lado do simbolo. */
+.detail__phrase {
+  margin-top: 12px;
+  padding-left: 12px;
+  border-left: 2px solid color-mix(in srgb, var(--sign) 55%, transparent);
+  font-size: 0.94rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------------
+   5. Compatibilidade
+   --------------------------------------------------------------------- */
+.compat__form {
+  padding: var(--gap-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.compat__form-head {
+  margin-bottom: var(--gap);
+  text-align: center;
+}
+
+.compat__form-title {
+  font-size: 1.16rem;
+  font-weight: 640;
+}
+
+.compat__form-sub {
+  margin-top: 6px;
+  font-size: 0.88rem;
+  color: var(--text-mute);
+}
+
+.compat__result {
+  margin-top: var(--gap-lg);
+}
+
+.compat__pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  margin-bottom: var(--gap-lg);
+}
+
+.compat__sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.compat__sign-glyph {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tone) 30%, transparent);
+  border-radius: 18px;
+  transition: transform var(--fast) var(--ease);
+}
+
+.compat__sign:hover .compat__sign-glyph {
+  transform: scale(1.06);
+}
+
+.compat__sign-glyph svg {
+  width: 30px;
+  height: 30px;
+}
+
+.compat__sign-name {
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.compat__vs {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  font-size: 0.78rem;
+  font-weight: 660;
+  letter-spacing: 0.04em;
+  color: var(--text-mute);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.compat__overall {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  margin-bottom: var(--gap-lg);
+  padding: var(--gap);
+  background: color-mix(in srgb, var(--overall) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--overall) 26%, transparent);
+  border-radius: var(--radius);
+}
+
+.compat__overall-glyph {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--overall);
+  background: color-mix(in srgb, var(--overall) 14%, transparent);
+  border-radius: 15px;
+}
+
+.compat__overall-glyph svg {
+  width: 26px;
+  height: 26px;
+}
+
+.compat__overall-label {
+  font-size: 0.76rem;
+  font-weight: 620;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.compat__overall-value {
+  font-size: 1.22rem;
+  font-weight: 660;
+  color: var(--overall);
+}
+
+/* Abertura do par: texto proprio, gerado a cada visita. */
+.compat__intro {
+  margin-top: var(--gap);
+  padding: var(--gap);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--text-dim);
+  text-wrap: pretty;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--brand);
+  border-radius: var(--radius-md);
+}
+
+/* ---------------------------------------------------------------------
+   Ajuste para telas medias: menos altura de rolagem
+   --------------------------------------------------------------------- */
+@media (min-width: 700px) {
+  .sign-grid {
+    gap: var(--gap);
+  }
+
+  .result__hero,
+  .detail__hero {
+    padding: var(--gap-xl);
+  }
+
+  .compat__pair {
+    gap: var(--gap-lg);
+  }
+}

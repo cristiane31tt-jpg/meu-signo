@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Meu Signo</title>
+  <meta name="description" content="Descubra seu signo, conheca os 12 signos do zodiaco e veja a compatibilidade entre eles.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+  <div class="bg-decor" aria-hidden="true"></div>
+
+  <header class="app-bar">
+    <div class="app-bar__inner">
+      <button class="back-btn" id="back-btn" type="button" aria-label="Voltar" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 5 8 12l7 7"/>
+        </svg>
+      </button>
+
+      <div class="app-bar__mark">
+        <span class="app-bar__dot" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.2"/>
+            <path d="M12 3.8v16.4M3.8 12h16.4"/>
+          </svg>
+        </span>
+        <span class="app-bar__title" id="app-bar-title">Meu Signo</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main" id="app" tabindex="-1"></main>
+
+  <nav class="tab-bar" aria-label="Navegacao principal">
+    <div class="tab-bar__inner">
+      <a class="tab" href="#/" data-tab="#/">
+        <span class="tab__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5.5H9V20H5a1 1 0 0 1-1-1Z"/>
+          </svg>
+        </span>
+        Inicio
+      </a>
+
+      <a class="tab" href="#/signos" data-tab="#/signos">
+        <span class="tab__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.4"/>
+            <path d="M12 3.6v16.8M3.6 12h16.8"/>
+            <path d="M6 6c3.4 3.4 3.4 8.6 0 12M18 6c-3.4 3.4-3.4 8.6 0 12"/>
+          </svg>
+        </span>
+        Signos
+      </a>
+
+      <a class="tab" href="#/compatibilidade" data-tab="#/compatibilidade">
+        <span class="tab__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 15.5 5.6 18.9a3.4 3.4 0 0 1-4.8-4.8L4.4 10.5"/>
+            <path d="M15 8.5l3.4-3.4a3.4 3.4 0 0 1 4.8 4.8l-3.6 3.6"/>
+            <path d="M8.5 15.5 15.5 8.5"/>
+          </svg>
+        </span>
+        Compatibilidade
+      </a>
+    </div>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Dados -->
+  <script src="js/data/signs.js"></script>
+  <script src="js/data/phrases.js"></script>
+  <script src="js/data/profiles.js"></script>
+  <script src="js/data/compatibility.js"></script>
+
+  <!-- Biblioteca -->
+  <script src="js/lib/zodiac.js"></script>
+  <script src="js/lib/phrases.js"></script>
+  <script src="js/lib/profiles.js"></script>
+  <script src="js/lib/ui.js"></script>
+
+  <!-- Telas -->
+  <script src="js/screens/home.js"></script>
+  <script src="js/screens/result.js"></script>
+  <script src="js/screens/all-signs.js"></script>
+  <script src="js/screens/sign-detail.js"></script>
+  <script src="js/screens/compatibility.js"></script>
+
+  <!-- Roteador -->
+  <script src="js/app.js"></script>
+</body>
+</html>
