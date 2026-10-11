@@ -59,7 +59,7 @@ jobs:
           java-version: '21'
 
       - name: Preparar o Android SDK (command-line tools)
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Aceitar licencas e instalar componentes do Android SDK
         run: |
