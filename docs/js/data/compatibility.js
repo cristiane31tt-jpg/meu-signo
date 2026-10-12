@@ -53,7 +53,7 @@
     },
     {
       id: 'comunicacao',
-      label: 'Comunicacao',
+      label: 'Comunicação',
       hint: 'Entender o outro sem precisar traduzir tudo.',
       weights: { element: 0.42, modality: 0.23, polarity: 0.35 }
     },
