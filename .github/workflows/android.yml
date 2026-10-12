@@ -87,6 +87,7 @@ jobs:
           find android/app/build/outputs/apk -name "*.apk"
 
       - name: Publicar o AAB como artefato para download
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: meu-signo-aab
@@ -95,6 +96,7 @@ jobs:
           retention-days: 30
 
       - name: Publicar o APK como artefato para download
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: meu-signo-apk
