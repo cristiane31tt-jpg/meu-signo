@@ -561,7 +561,7 @@
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--tabbar-h) + 16px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
   z-index: 40;
   width: max-content;
   max-width: calc(100vw - 40px);
