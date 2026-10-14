@@ -11,6 +11,12 @@
 (function (global) {
   'use strict';
 
+  /* Converte um numero em texto de dois digitos. Substitui
+     String.prototype.padStart, ausente em WebViews antigas. */
+  function pad2(value) {
+    return (value < 10 ? '0' : '') + value;
+  }
+
   var MONTHS = [
     'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho',
     'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
@@ -135,8 +141,8 @@
 
   /* Formata a data no padrao brasileiro: 14/05/1990 */
   function formatDate(date) {
-    var d = String(date.getDate()).padStart(2, '0');
-    var m = String(date.getMonth() + 1).padStart(2, '0');
+    var d = pad2(date.getDate());
+    var m = pad2(date.getMonth() + 1);
     return d + '/' + m + '/' + date.getFullYear();
   }
 
@@ -197,6 +203,7 @@
   }
 
   global.MeuSigno = global.MeuSigno || {};
+  global.MeuSigno.pad2 = pad2;
   global.MeuSigno.Zodiac = {
     MONTHS: MONTHS,
     stamp: stamp,

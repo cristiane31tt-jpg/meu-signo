@@ -41,8 +41,8 @@
 
   function todayISO() {
     var now = new Date();
-    var m = String(now.getMonth() + 1).padStart(2, '0');
-    var d = String(now.getDate()).padStart(2, '0');
+    var m = M.pad2(now.getMonth() + 1);
+    var d = M.pad2(now.getDate());
     return now.getFullYear() + '-' + m + '-' + d;
   }
 

@@ -11,11 +11,8 @@
 
   /* Periodo curto para o card: "21/03 - 19/04". */
   function shortPeriod(sign) {
-    function pad(value) {
-      return String(value).padStart(2, '0');
-    }
-    return pad(sign.from[1]) + '/' + pad(sign.from[0]) +
-      ' - ' + pad(sign.to[1]) + '/' + pad(sign.to[0]);
+    return M.pad2(sign.from[1]) + '/' + M.pad2(sign.from[0]) +
+      ' - ' + M.pad2(sign.to[1]) + '/' + M.pad2(sign.to[0]);
   }
 
   M.screens.allSigns = {
