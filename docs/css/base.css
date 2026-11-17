@@ -535,3 +535,40 @@ a {
     padding-inline: 16px;
   }
 }
+
+/* ---------------------------------------------------------------------
+   10. Banner do AdMob (somente no aplicativo Android)
+
+   O banner e uma view nativa desenhada sobre a parte de baixo da tela.
+   Enquanto ele estiver visivel, a barra de abas sobe e o conteudo ganha
+   espaco extra, para nada ficar coberto. Sem banner, tudo continua
+   exatamente como antes.
+   --------------------------------------------------------------------- */
+html.admob-banner .tab-bar {
+  bottom: var(--admob-height, 0px);
+}
+
+html.admob-banner .app-main {
+  padding-bottom: calc(var(--tabbar-h) + var(--gap-xl) + var(--admob-height, 0px));
+}
+
+html.admob-banner .toast {
+  bottom: calc(var(--tabbar-h) + 16px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)) + var(--admob-height, 0px));
+}
+
+/* Entrada para as opcoes de privacidade do UMP. Fica oculta ate o
+   consentimento informar que o formulario e obrigatorio. */
+button.app-note__link--button {
+  display: none;
+  margin-left: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+html.admob-privacy .app-note__link--button {
+  display: inline-flex;
+}

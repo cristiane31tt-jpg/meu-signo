@@ -77,13 +77,74 @@ jobs:
           echo "Secrets de assinatura encontrados."
 
       - name: Instalar dependencias do projeto
-        run: npm install
+        run: npm ci
 
       - name: Criar o projeto Android do zero e sincronizar
         run: |
           rm -rf android
           npx cap add android
           npx cap sync android
+
+      - name: Fixar versao nativa do play-services-ads (25.4.0)
+        run: |
+          # O plugin 8.3.0 aceita este override em variables.gradle (rootProject.ext).
+          # 25.4.0 e a unica versao 25.4.x publicada no Google Maven: fixar nao
+          # muda a resolucao atual, apenas impede uma versao futura inesperada.
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'android/variables.gradle';
+          const version = '25.4.0';
+          const expected = "playServicesAdsVersion = '" + version + "'";
+          if (!fs.existsSync(path)) {
+            console.error('Falha: android/variables.gradle nao encontrado.');
+            process.exit(1);
+          }
+          let text = fs.readFileSync(path, 'utf8');
+          if (!text.includes('playServicesAdsVersion')) {
+            text = "ext {\n    " + expected + "\n}\n" + text;
+            fs.writeFileSync(path, text);
+          }
+          const finalText = fs.readFileSync(path, 'utf8');
+          const count = (finalText.match(/playServicesAdsVersion\s*=\s*'[^']*'/g) || []).length;
+          if (!finalText.includes(expected) || count !== 1) {
+            console.error('Falha: pin de play-services-ads ausente ou divergente.');
+            process.exit(1);
+          }
+          console.log('play-services-ads fixado em ' + version + ' no variables.gradle.');
+          NODE
+
+      - name: Configurar o App ID do AdMob (somente teste)
+        run: |
+          # App ID de TESTE oficial do Google. NAO e o App ID real do Meu Signo.
+          # Serve apenas para o SDK aceitar a inicializacao nesta fase.
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'android/app/src/main/AndroidManifest.xml';
+          const name = 'com.google.android.gms.ads.APPLICATION_ID';
+          const appId = 'ca-app-pub-3940256099942544~3347511713';
+          let xml = fs.readFileSync(path, 'utf8');
+          if (xml.includes(name)) {
+            console.log('App ID do AdMob ja presente no manifesto.');
+          } else {
+            const meta = '        <meta-data android:name="' + name + '" android:value="' + appId + '" />\n';
+            xml = xml.replace(/(<application\b[^>]*>\s*\n)/, '$1' + meta);
+            fs.writeFileSync(path, xml);
+          }
+          /* O App ID precisa ficar DENTRO de <application>; fora disso o SDK
+             falha na inicializacao. Se a verificacao falhar, o build para. */
+          const open = xml.indexOf('<application');
+          const close = xml.indexOf('</application>');
+          const metaAt = xml.indexOf(name);
+          const valid = xml.indexOf('<manifest') !== -1
+            && xml.indexOf('</manifest>') !== -1
+            && open !== -1 && close !== -1
+            && open < metaAt && metaAt < close;
+          if (!valid) {
+            console.error('Falha: App ID do AdMob ausente ou fora de <application>.');
+            process.exit(1);
+          }
+          console.log('App ID do AdMob confirmado dentro de <application>.');
+          NODE
 
       - name: Compilar o AAB de release (sem assinatura do Gradle)
         run: |

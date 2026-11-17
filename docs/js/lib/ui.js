@@ -149,10 +149,13 @@
       '<div class="app-note__body">' +
       '<p>Um mapa dos 12 signos, das personalidades que cada um descreve ' +
       'e da compatibilidade entre eles.</p>' +
-      '<p class="app-note__meta">Funciona sem internet, sem conta e sem ' +
-      'enviar nenhum dado para servidores.</p>' +
+      '<p class="app-note__meta">Funciona sem conta e sem login. A sua data de ' +
+      'nascimento fica no seu aparelho. A publicidade usa a internet e o ' +
+      'Google AdMob, conforme o seu consentimento.</p>' +
       '<p class="app-note__links">' +
       '<a class="app-note__link" href="privacy-policy.html">Política de Privacidade</a>' +
+      '<button class="app-note__link app-note__link--button" type="button" ' +
+      'data-ads-privacy>Opções de privacidade</button>' +
       '</p>' +
       '</div>' +
       '</details>'
